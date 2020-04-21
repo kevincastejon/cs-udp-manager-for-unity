@@ -13,7 +13,7 @@ namespace kevincastejon
     {
 
         private static ThreadManager _instance;
-
+        private static readonly object locker = new object();
         private List<EventDispatcher> eds = new List<EventDispatcher>();
         private List<object> ts = new List<object>();
         private List<kevincastejon.Event> es = new List<kevincastejon.Event>();
@@ -37,19 +37,25 @@ namespace kevincastejon
         // Update is called once per frame
         void Update()
         {
-            while (eds.Count > 0)
+            lock (locker)
             {
-                eds[0].DoDispatch(es[0], ts[0]);
-                eds.RemoveAt(0); es.RemoveAt(0); ts.RemoveAt(0);
+                while (eds.Count > 0)
+                {
+                    eds[0].DoDispatch(es[0], ts[0]);
+                    eds.RemoveAt(0); es.RemoveAt(0); ts.RemoveAt(0);
+                }
             }
         }
         internal static ThreadManager Instance { get { return (_instance); } }
 
         internal static void DispatchEventFromMainThread(EventDispatcher ed, kevincastejon.Event e, object target = null)
         {
-            if (Instance)
+            lock (locker)
             {
-                Instance.eds.Add(ed); Instance.es.Add(e); Instance.ts.Add(target);
+                if (Instance)
+                {
+                    Instance.eds.Add(ed); Instance.es.Add(e); Instance.ts.Add(target);
+                }
             }
         }
     }

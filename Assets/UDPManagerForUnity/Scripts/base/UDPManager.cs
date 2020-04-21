@@ -86,7 +86,8 @@ namespace kevincastejon
         private UDPChannel _pingChannel = null;         //Implemented for UDPServer
         private UDPChannel _connectionChannel = null;   //and UDPClient
         private static List<UDPManager> UDPmanagers = new List<UDPManager>();
-        private static readonly object locker = new object();
+        private static readonly object receiveLocker = new object();
+        private static readonly object sendLocker = new object();
 
         /// <summary>
         /// constructor </summary>
@@ -414,7 +415,7 @@ namespace kevincastejon
 
         private void _ReceiveDataHandler(IAsyncResult ar)
         {
-            lock (locker)
+            lock (receiveLocker)
             {
 
                 IPEndPoint receivedIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
@@ -576,9 +577,11 @@ namespace kevincastejon
         }
         private void _ClassicSend(object udpData, string remoteAddress, int remotePort)
         {
-            byte[] sendbuf = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(udpData));
-            _UDPSocketIPv4.Send(sendbuf, sendbuf.Length, new IPEndPoint(IPAddress.Parse(remoteAddress), remotePort));
-
+            lock (sendLocker)
+            {
+                byte[] sendbuf = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(udpData));
+                _UDPSocketIPv4.Send(sendbuf, sendbuf.Length, new IPEndPoint(IPAddress.Parse(remoteAddress), remotePort));
+            }
         }
 
         private int _GetNextUniqueID()

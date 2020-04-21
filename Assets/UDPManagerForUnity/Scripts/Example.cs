@@ -1,4 +1,5 @@
 ﻿using kevincastejon;
+using System.Collections.Generic;
 using UnityEngine;
 using UDPClient = kevincastejon.unity.UDPClient;
 using UDPManager = kevincastejon.unity.UDPManager;
@@ -8,6 +9,9 @@ namespace UDPManagerExample
 {
     public class Example : MonoBehaviour
     {
+        private int it=0;
+        public UDPClient udpc;
+        private List<Vector2> inputs = new List<Vector2>();
         // Start is called before the first frame update
         void Start()
         {
@@ -17,7 +21,26 @@ namespace UDPManagerExample
         // Update is called once per frame
         void Update()
         {
+            it++;
+            if (it>=120 && udpc.Connected == false && udpc.Connecting == false)
+            {
+                udpc.Connect("127.0.0.1", 8888);
+            }
+            if (udpc.Connected)
+            {
+                inputs.Add(new Vector2(4, 5));
+            }
+        }
 
+        public void onClientSentInput(TimerEvent e)
+        {
+            if (udpc.Connected)
+            {
+                Vector2[] data = new Vector2[inputs.Count];
+                inputs.CopyTo(data,0);
+                udpc.SendToServer("myChannelName", data);
+                inputs.Clear();
+            }
         }
 
         public void OnUDPServerEvent(UDPServerEvent e)
@@ -32,9 +55,8 @@ namespace UDPManagerExample
             }
             else if (e.Name == UDPServerEvent.Names.CLIENT_SENT_DATA.ToString())
             {
-                Vector3 vec = e.UDPdataInfo.Data.ToObject<Vector3>();
-                vec.Set(1, 2, 3);
-                Debug.Log("Received from <" + e.UDPpeer.Address + ":" + e.UDPpeer.Port + "> : " + vec + GameObject.FindGameObjectWithTag("MainCamera"));
+                List<Vector2> vec = e.UDPdataInfo.Data.ToObject<List<Vector2>>();
+                Debug.Log(e.UDPdataInfo.Data);
             }
             else
             {
@@ -47,8 +69,6 @@ namespace UDPManagerExample
             if (e.Name == UDPClientEvent.Names.CONNECTED_TO_SERVER.ToString())
             {
                 Debug.Log("Connected to server <" + e.UDPpeer.Address + ":" + e.UDPpeer.Port + ">");
-                UDPClient udps = e.Target as UDPClient;
-                udps.SendToServer("myChannelName", new Vector3());
             }
             else if (e.Name == UDPClientEvent.Names.CONNECTION_FAILED.ToString())
             {

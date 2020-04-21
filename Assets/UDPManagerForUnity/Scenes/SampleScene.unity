@@ -282,6 +282,69 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &778652041
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 778652043}
+  - component: {fileID: 778652042}
+  m_Layer: 0
+  m_Name: ClientSendTimer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &778652042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 778652041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fd311a5ee5ac0c4d8a279aa833b70c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Duration: 50
+  NumberOfRepeat: 0
+  autoStart: 1
+  OnTimer:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2011430185}
+        m_MethodName: onClientSentInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnTimerComplete:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!4 &778652043
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 778652041}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -365,6 +428,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1161516533 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7881543220320144568, guid: 0b0b465eb20328748a0a96a89d0cfac3,
+    type: 3}
+  m_PrefabInstance: {fileID: 7881543218740857014}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3afa37f2112884a48a2488097c1f0eed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2011430184
 GameObject:
   m_ObjectHideFlags: 0
@@ -394,6 +469,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87ef9c3a230123e4c96b74ec445776db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  udpc: {fileID: 1161516533}
 --- !u!4 &2011430186
 Transform:
   m_ObjectHideFlags: 0
@@ -406,7 +482,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1921515972304056635
 PrefabInstance:
@@ -524,6 +600,16 @@ PrefabInstance:
       propertyPath: listeners.OnServerTimedOut.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 2011430185}
+    - target: {fileID: 7881543220320144568, guid: 0b0b465eb20328748a0a96a89d0cfac3,
+        type: 3}
+      propertyPath: channels.Array.data[0].GuarantiesDelivery
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7881543220320144568, guid: 0b0b465eb20328748a0a96a89d0cfac3,
+        type: 3}
+      propertyPath: autoConnect
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7881543220320144569, guid: 0b0b465eb20328748a0a96a89d0cfac3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -583,6 +669,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: UDPClient
+      objectReference: {fileID: 0}
+    - target: {fileID: 7881543220320144571, guid: 0b0b465eb20328748a0a96a89d0cfac3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0b0b465eb20328748a0a96a89d0cfac3, type: 3}

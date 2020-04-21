@@ -20,6 +20,7 @@ namespace kevincastejon.unity
     }
     public class UDPClient : MonoBehaviour
     {
+        public bool autoConnect;
         public string serverAddress;
         public int serverPort;
         public int localPort;
@@ -36,7 +37,7 @@ namespace kevincastejon.unity
         // Start is called before the first frame update
         void Start()
         {
-            udpc = new _UDPClient();
+            udpc = new _UDPClient(localPort);
             udpc.DefaultTarget = this;
             //Add listeners on the instance of UDPClient
             udpc.On<UDPManagerEvent>(UDPManagerEvent.Names.BOUND, (UDPManagerEvent e) =>
@@ -69,11 +70,10 @@ namespace kevincastejon.unity
                 udpc.AddChannel(uc.Name, uc.GuarantiesDelivery, uc.MaintainOrder, uc.RetryTime, uc.CancelTime);
             });
 
-            udpc.Connect(serverAddress, serverPort, localPort);
-        }
-        public void Bite(UDPClientEvent e)
-        {
-            Debug.Log("bitagriveau");
+            if (autoConnect)
+            {
+                udpc.Connect(serverAddress, serverPort, localPort);
+            }
         }
         // Update is called once per frame
         void Update()
